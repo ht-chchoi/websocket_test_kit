@@ -29,11 +29,6 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
@@ -54,6 +49,20 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.java-websocket</groupId>-->
+<!--            <artifactId>Java-WebSocket</artifactId>-->
+<!--            <version>1.5.1</version>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>com.neovisionaries</groupId>
+            <artifactId>nv-websocket-client</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

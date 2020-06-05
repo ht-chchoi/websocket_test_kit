@@ -111,7 +111,7 @@
                         </TextField>
                     </children>
                 </HBox>
-                <Button fx:id="btnConnectServer" mnemonicParsing="false" text="ConnectServer" />
+                <Button fx:id="btnConnectServer" mnemonicParsing="false" onAction="#handleBtnConnectServer" text="ConnectServer" />
             </children>
             <VBox.margin>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
