@@ -6,55 +6,33 @@
  */
 package com.websocket.websocket_test_kit.wallpadTest.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 
-public class MainController extends Application {
-  private static final Logger log = LoggerFactory.getLogger(MainController.class);
+@Component
+public class MainController {
+  @FXML
+  public TextField tfIp;
+  @FXML
+  public TextField tfPort;
+  @FXML
+  public TextField tfSite;
+  @FXML
+  public TextField tfDong;
+  @FXML
+  public TextField tfHo;
+  @FXML
+  public TextField tfWpIp;
+  @FXML
+  public TextField tfToken;
+  @FXML
+  public Button btnConnectServer;
 
-  private Stage primaryStage;
-  private BorderPane rootLayout;
-
-  public Stage getPrimaryStage() {
-    return primaryStage;
+  @FXML
+  public void initialize(){
+    tfToken.setText("1234");
   }
 
-  @Override
-  public void start(final Stage primaryStage) {
-    try {
-      this.primaryStage = primaryStage;
-      this.primaryStage.setTitle("서버 <-> 월패드 테스트");
-
-      this.initRootLayout();
-
-    } catch (Exception e) {
-      log.error("start() : " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
-  private void initRootLayout(){
-    try {
-      FXMLLoader fxmlLoader = new FXMLLoader();
-      fxmlLoader.setLocation(Thread.currentThread().getContextClassLoader()
-          .getResource("ui/RootLayout.fxml"));
-      this.rootLayout = (BorderPane) fxmlLoader.load();
-
-      Scene scene = new Scene(this.rootLayout);
-      this.primaryStage.setScene(scene);
-      this.primaryStage.show();
-    } catch (Exception e) {
-      log.error("initRootLayout() : " + e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
-  public void startUi(String[] args){
-    launch(args);
-  }
 }
