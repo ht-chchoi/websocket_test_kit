@@ -1,6 +1,6 @@
 package com.websocket.websocket_test_kit;
 
-import com.websocket.websocket_test_kit.util.ConstVal;
+import com.websocket.websocket_test_kit.common.ConstVal;
 import com.websocket.websocket_test_kit.wallpadTest.controller.MainController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 @SpringBootApplication
@@ -18,7 +18,7 @@ public class WebsocketTestKitApplication extends Application {
   private static final Logger log = LoggerFactory.getLogger(WebsocketTestKitApplication.class);
 
   private ConfigurableApplicationContext context;
-  private VBox rootNode;
+  private AnchorPane rootNode;
 
 
   @Override

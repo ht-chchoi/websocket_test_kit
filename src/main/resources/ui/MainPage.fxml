@@ -3,119 +3,135 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.websocket.websocket_test_kit.wallpadTest.controller.MainController">
-    <children>
-        <FlowPane hgap="20.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
-            <children>
-                <HBox maxHeight="30.0" maxWidth="100.0" prefHeight="300.0" prefWidth="100.0">
-                    <children>
-                        <Label text="ip">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfIp" prefHeight="23.0" prefWidth="75.0" text="127.0.0.1">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="110.0" prefHeight="30.0" prefWidth="110.0">
-                    <children>
-                        <Label text="port">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfPort" prefHeight="23.0" prefWidth="56.0" text="30002">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="100.0" prefHeight="30.0" prefWidth="100.0">
-                    <children>
-                        <Label text="site">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfSite" prefHeight="23.0" prefWidth="50.0" text="8">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="110.0" prefHeight="30.0" prefWidth="110.0">
-                    <children>
-                        <Label text="dong">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfDong" prefHeight="23.0" prefWidth="50.0" text="701">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="90.0" prefHeight="30.0" prefWidth="90.0">
-                    <children>
-                        <Label text="ho">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfHo" prefHeight="23.0" prefWidth="46.0" text="904">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="120.0" prefHeight="30.0" prefWidth="120.0">
-                    <children>
-                        <Label text="wpIP">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfWpIp" prefHeight="23.0" prefWidth="70.0" text="127.0.0.1">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <HBox maxHeight="30.0" maxWidth="400.0" prefHeight="30.0" prefWidth="400.0">
-                    <children>
-                        <Label text="token">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfToken" prefHeight="23.0" prefWidth="339.0">
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                        </TextField>
-                    </children>
-                </HBox>
-                <Button fx:id="btnConnectServer" mnemonicParsing="false" onAction="#handleBtnConnectServer" text="ConnectServer" />
-            </children>
-            <VBox.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </VBox.margin>
-        </FlowPane>
-    </children>
-</VBox>
+<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.websocket.websocket_test_kit.wallpadTest.controller.MainController">
+   <children>
+      <FlowPane hgap="20.0" layoutX="10.0" layoutY="10.0" prefHeight="79.0" prefWidth="760.0" vgap="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox maxHeight="30.0" maxWidth="100.0" prefHeight="300.0" prefWidth="100.0">
+               <children>
+                  <Label text="ip">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfIp" prefHeight="23.0" prefWidth="75.0" text="127.0.0.1">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="110.0" prefHeight="30.0" prefWidth="110.0">
+               <children>
+                  <Label text="port">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfPort" prefHeight="23.0" prefWidth="56.0" text="30002">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="100.0" prefHeight="30.0" prefWidth="100.0">
+               <children>
+                  <Label text="site">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfSite" prefHeight="23.0" prefWidth="50.0" text="8">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="110.0" prefHeight="30.0" prefWidth="110.0">
+               <children>
+                  <Label text="dong">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfDong" prefHeight="23.0" prefWidth="50.0" text="701">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="90.0" prefHeight="30.0" prefWidth="90.0">
+               <children>
+                  <Label text="ho">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfHo" prefHeight="23.0" prefWidth="46.0" text="904">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="120.0" prefHeight="30.0" prefWidth="120.0">
+               <children>
+                  <Label text="wpIP">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfWpIp" prefHeight="23.0" prefWidth="70.0" text="127.0.0.1">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox maxHeight="30.0" maxWidth="400.0" prefHeight="30.0" prefWidth="400.0">
+               <children>
+                  <Label text="token">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfToken" prefHeight="23.0" prefWidth="339.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <Button fx:id="btnConnectServer" mnemonicParsing="false" onAction="#handleBtnConnectServer" text="ConnectServer" />
+            <Button fx:id="btnDisconnect" disable="true" mnemonicParsing="false" onAction="#handleBtnDisconnect" text="Disconnect" />
+         </children>
+      </FlowPane>
+      <Label text="data to response" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="90.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="taDataToResponse" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="280.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="120.0" />
+      <Button fx:id="btnAcceptData" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleBtnAcceptData" prefHeight="30.0" prefWidth="100.0" text="Accept Data" AnchorPane.bottomAnchor="245.0" AnchorPane.rightAnchor="120.0" />
+      <Button fx:id="btnCancelData" disable="true" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleBtnCancelData" prefHeight="30.0" prefWidth="100.0" text="Cancel Data" AnchorPane.bottomAnchor="245.0" AnchorPane.rightAnchor="10.0" />
+      <Label text="console" AnchorPane.bottomAnchor="217.0" AnchorPane.leftAnchor="10.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="taConsole" editable="false" prefHeight="205.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <font>
+            <Font size="18.0" />
+         </font></TextArea>
+   </children>
+</AnchorPane>

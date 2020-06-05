@@ -6,12 +6,15 @@
  */
 package com.websocket.websocket_test_kit.websocket.service;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
+import com.websocket.websocket_test_kit.wallpadTest.data.WebsocketResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -21,12 +24,17 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.stereotype.Service;
 
 @Service("ConnectServerService")
 public class ConnectServerServiceImpl implements ConnectServerService {
   private static final Logger log = LoggerFactory.getLogger(ConnectServerServiceImpl.class);
 
+  @Autowired
+  private AutoResponseMessage autoResponseMessage;
+  
   @Override
   public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo) {
     SSLContext sslContext = this.createSSLContext();
@@ -74,7 +82,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
     return null;
   }
 
-  private static WebSocket connect(final SSLSocketFactory socketFactory,
+  private WebSocket connect(final SSLSocketFactory socketFactory,
       final ConnectInfo connectInfo) throws IOException, WebSocketException {
     log.info("connect to server: " + connectInfo.getFullInfo());
     return new WebSocketFactory()
@@ -83,15 +91,23 @@ public class ConnectServerServiceImpl implements ConnectServerService {
         .setSSLSocketFactory(socketFactory)
         .createSocket(connectInfo.getFullInfo())
         .addListener(new WebSocketAdapter() {
-
-          // binary message arrived from the server
+//          바이너리 메세지가 온다면 이쪽 구현
+          @Override
           public void onBinaryMessage(WebSocket websocket, byte[] binary) {
             log.info("binary message: " + new String(binary));
           }
-
-          // A text message arrived from the server.
+          @Override
           public void onTextMessage(WebSocket websocket, String message) {
-            log.info("message from server" + message);
+            log.info("============================ message ============================");
+            log.info("<<<<<< message from server: " + message);
+            WebsocketResponse websocketResponse = autoResponseMessage.buildResponseMessage(message);
+            Gson gson = new Gson();
+            String response = gson.toJson(websocketResponse);
+            StringBuffer stringBuffer = new StringBuffer(response);
+            stringBuffer.insert(response.length()-1, ",\"data\":"+autoResponseMessage.getData());
+            log.info(">>>>>> response to server: " + stringBuffer);
+            websocket.sendText(stringBuffer.toString());
+            log.info("============================ message ============================");
           }
         })
         .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)

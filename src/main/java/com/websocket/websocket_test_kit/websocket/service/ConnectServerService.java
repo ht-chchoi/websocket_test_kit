@@ -10,5 +10,5 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 
 public interface ConnectServerService {
-  WebSocket connectWebsocketToServer(ConnectInfo connectInfo);
+  WebSocket connectWebsocketToServer(final ConnectInfo connectInfo);
 }

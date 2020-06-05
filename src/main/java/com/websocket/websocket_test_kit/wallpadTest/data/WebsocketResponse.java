@@ -7,13 +7,18 @@
 package com.websocket.websocket_test_kit.wallpadTest.data;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Message {
-  private String from;
-  private String text;
+@NoArgsConstructor
+@Builder
+@ToString
+public class WebsocketResponse {
+  private String id;
+  private String type;
+  private int status;
 }
