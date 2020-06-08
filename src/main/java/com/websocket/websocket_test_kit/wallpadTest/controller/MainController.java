@@ -101,6 +101,8 @@ public class MainController {
     }
     logConsoleService.writeConsoleLog("=================== End Server Connection ====================");
     log.info("=================== End Server Connection ===================");
+    handleBtnStatusAccept(null);
+    handleBtnAcceptData(null);
   }
 
   @FXML
