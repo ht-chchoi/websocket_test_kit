@@ -21,12 +21,13 @@ import lombok.ToString;
 @ToString
 public class AutoResponseMessage {
   private String data;
+  private int status;
 
   public WebsocketResponse buildResponseMessage(String message){
     return WebsocketResponse.builder()
         .id(message.split("\"id\":\"")[1].split("\"")[0])
         .type(message.split("\"type\":\"")[1].split("\"")[0])
-        .status(200)
+        .status(status)
         .build();
   }
 }

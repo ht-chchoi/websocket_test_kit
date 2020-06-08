@@ -121,6 +121,8 @@
             <Font size="24.0" />
          </font>
       </Label>
+      <TextField fx:id="tfStatus" prefHeight="23.0" prefWidth="41.0" text="200" AnchorPane.rightAnchor="115.0" AnchorPane.topAnchor="90.0" />
+      <Button fx:id="btnStatusAccept" mnemonicParsing="false" onAction="#handleBtnStatusAccept" text="Status Accept" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="90.0" />
       <TextArea fx:id="taDataToResponse" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="280.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="120.0" />
       <Button fx:id="btnAcceptData" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleBtnAcceptData" prefHeight="30.0" prefWidth="100.0" text="Accept Data" AnchorPane.bottomAnchor="245.0" AnchorPane.rightAnchor="120.0" />
       <Button fx:id="btnCancelData" disable="true" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleBtnCancelData" prefHeight="30.0" prefWidth="100.0" text="Cancel Data" AnchorPane.bottomAnchor="245.0" AnchorPane.rightAnchor="10.0" />

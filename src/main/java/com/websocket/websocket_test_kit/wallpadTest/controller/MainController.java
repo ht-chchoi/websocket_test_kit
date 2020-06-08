@@ -10,6 +10,7 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.websocket.websocket_test_kit.util.UtilQueryBuilder;
 import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
+import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
 import com.websocket.websocket_test_kit.websocket.service.ConnectServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,10 @@ public class MainController {
   @FXML
   private Button btnDisconnect;
   @FXML
+  private TextField tfStatus;
+  @FXML
+  private Button btnStatusAccept;
+  @FXML
   private TextArea taDataToResponse;
   @FXML
   private Button btnAcceptData;
@@ -59,12 +64,18 @@ public class MainController {
   private ConnectServerService connectServerService;
   @Autowired
   private AutoResponseMessage autoResponseMessage;
+  @Autowired
+  private LogConsoleService logConsoleService;
 
   private WebSocket webSocket;
 
   @FXML
   public void initialize() {
-    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTkxMzYyMDgxLCJqdGkiOiIwODgzNTc2YS1mODQyLTQ4ODAtODFjNi1jMDhkY2ZlZTcyNzMiLCJjbGllbnRfaWQiOiJ0ZXN0In0.shKdXSf-lFqah2mVqVIJZN8M0qawPYP4wD6ukiDGwz8");
+    logConsoleService.setTextArea(taConsole);
+    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTkxNjE1NjAxLCJqdGkiOiI2ODVjMWQ2NS1lNTdmLTQxM2MtOTJjMi03YTdkYjAyOGE3MDEiLCJjbGllbnRfaWQiOiJ0ZXN0In0.St6IvAjM6zISG9PoNMMz4TxjyVAPuN4yKusZU58wLpM");
+    logConsoleService.writeConsoleLog("initial response status : 200");
+    autoResponseMessage.setStatus(200);
+    logConsoleService.writeConsoleLog("initial response data : {\"result\" : 200}");
     taDataToResponse.setText("{\"result\" : 200}");
     autoResponseMessage.setData("{\"result\" : 200}");
     btnAcceptData.setDisable(true);
@@ -72,6 +83,7 @@ public class MainController {
 
   @FXML
   private void handleBtnConnectServer(ActionEvent event) {
+    logConsoleService.writeConsoleLog("=================== Start Server Connection ===================");
     log.info("=================== Start Server Connection ===================");
     this.disconnectWebsocket();
     webSocket = connectServerService.connectWebsocketToServer(ConnectInfo.builder()
@@ -86,6 +98,7 @@ public class MainController {
       btnDisconnect.setDisable(false);
       btnAcceptData.setDisable(false);
     }
+    logConsoleService.writeConsoleLog("=================== End Server Connection ====================");
     log.info("=================== End Server Connection ===================");
   }
 
@@ -95,8 +108,20 @@ public class MainController {
   }
 
   @FXML
+  private void handleBtnStatusAccept(ActionEvent event) {
+    try {
+      autoResponseMessage.setStatus(Integer.parseInt(this.tfStatus.getText()));
+      logConsoleService.writeConsoleLog("Status Set : "+autoResponseMessage.getStatus());
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+      logConsoleService.writeConsoleLog("Status set fail");
+    }
+  }
+
+  @FXML
   private void handleBtnAcceptData(ActionEvent event){
     autoResponseMessage.setData(taDataToResponse.getText());
+    logConsoleService.writeConsoleLog("Set Response Data : "+taDataToResponse.getText());
     btnAcceptData.setDisable(true);
     taDataToResponse.setDisable(true);
     btnCancelData.setDisable(false);
@@ -112,6 +137,8 @@ public class MainController {
 
   public void disconnectWebsocket(){
     if (this.webSocket != null && this.webSocket.isOpen()){
+      handleBtnCancelData(null);
+      logConsoleService.writeConsoleLog("Disconnect Websocket: "+webSocket.getURI());
       log.info("Disconnect Websocket: "+webSocket.getURI());
       this.webSocket.disconnect();
       btnConnectServer.setDisable(false);

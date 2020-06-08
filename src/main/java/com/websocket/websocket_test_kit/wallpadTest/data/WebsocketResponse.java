@@ -21,4 +21,5 @@ public class WebsocketResponse {
   private String id;
   private String type;
   private int status;
+  private String data;
 }

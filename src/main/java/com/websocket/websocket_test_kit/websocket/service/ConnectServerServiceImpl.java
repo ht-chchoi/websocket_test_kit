@@ -15,6 +15,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import com.websocket.websocket_test_kit.wallpadTest.data.WebsocketResponse;
+import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -34,6 +35,8 @@ public class ConnectServerServiceImpl implements ConnectServerService {
 
   @Autowired
   private AutoResponseMessage autoResponseMessage;
+  @Autowired
+  private LogConsoleService logConsoleService;
   
   @Override
   public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo) {
@@ -46,7 +49,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
 
       webSocket = connect(sslSocketFactory, connectInfo);
       log.info("Connect Success!!");
-
+      logConsoleService.writeConsoleLog("Connect Success!!");
     } catch (Exception ex) {
       ex.printStackTrace();
     }
@@ -59,7 +62,8 @@ public class ConnectServerServiceImpl implements ConnectServerService {
     try {
       KeyStore keyStore = KeyStore.getInstance("JKS");
       keyStore
-          .load(new FileInputStream("D:\\1_workspace\\intelliJ\\websocket_test_kit\\target\\classes\\hyundaitel.jks"),
+          .load(new FileInputStream(Thread.currentThread().getContextClassLoader()
+                  .getResource("hyundaitel.jks").toString().substring(6)),
               "vbfgrt45".toCharArray());
       //client.jks(truststore) 에 위의 https 서버의 인증서를 미리 import 해놓았다.
 
@@ -77,6 +81,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
       return sslContext;
     } catch (Exception ex) {
       ex.printStackTrace();
+      logConsoleService.writeConsoleLog(ex.getMessage());
     }
 
     return null;
@@ -85,6 +90,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   private WebSocket connect(final SSLSocketFactory socketFactory,
       final ConnectInfo connectInfo) throws IOException, WebSocketException {
     log.info("connect to server: " + connectInfo.getFullInfo());
+    logConsoleService.writeConsoleLog("connect to server >> " + connectInfo.getFullInfo());
     return new WebSocketFactory()
         .setConnectionTimeout(5000)
         .setVerifyHostname(false)
@@ -98,15 +104,21 @@ public class ConnectServerServiceImpl implements ConnectServerService {
           }
           @Override
           public void onTextMessage(WebSocket websocket, String message) {
+            logConsoleService.writeConsoleLog("============================ message ============================");
+            logConsoleService.writeConsoleLog("<<<<<< message from server: " + message);
             log.info("============================ message ============================");
             log.info("<<<<<< message from server: " + message);
             WebsocketResponse websocketResponse = autoResponseMessage.buildResponseMessage(message);
+            websocketResponse.setStatus(autoResponseMessage.getStatus());
             Gson gson = new Gson();
             String response = gson.toJson(websocketResponse);
             StringBuffer stringBuffer = new StringBuffer(response);
             stringBuffer.insert(response.length()-1, ",\"data\":"+autoResponseMessage.getData());
+            logConsoleService.writeConsoleLog("response data = "+autoResponseMessage.getData());
+            logConsoleService.writeConsoleLog(">>>>>> response to server: " + stringBuffer);
             log.info(">>>>>> response to server: " + stringBuffer);
             websocket.sendText(stringBuffer.toString());
+            logConsoleService.writeConsoleLog("============================ message ============================");
             log.info("============================ message ============================");
           }
         })

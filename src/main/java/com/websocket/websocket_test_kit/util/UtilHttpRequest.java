@@ -6,7 +6,6 @@
  */
 package com.websocket.websocket_test_kit.util;
 
-import com.websocket.websocket_test_kit.wallpadTest.controller.MainController;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
