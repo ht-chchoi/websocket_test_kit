@@ -16,6 +16,7 @@ import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import com.websocket.websocket_test_kit.wallpadTest.data.WebsocketResponse;
 import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -62,8 +63,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
     try {
       KeyStore keyStore = KeyStore.getInstance("JKS");
       keyStore
-          .load(new FileInputStream(Thread.currentThread().getContextClassLoader()
-                  .getResource("hyundaitel.jks").toString().substring(6)),
+          .load(this.getClass().getClassLoader().getResourceAsStream("hyundaitel.jks"),
               "vbfgrt45".toCharArray());
       //client.jks(truststore) 에 위의 https 서버의 인증서를 미리 import 해놓았다.
 
@@ -114,7 +114,8 @@ public class ConnectServerServiceImpl implements ConnectServerService {
             String response = gson.toJson(websocketResponse);
             StringBuffer stringBuffer = new StringBuffer(response);
             stringBuffer.insert(response.length()-1, ",\"data\":"+autoResponseMessage.getData());
-            logConsoleService.writeConsoleLog("response data = "+autoResponseMessage.getData());
+            logConsoleService.writeConsoleLog("response status : "+autoResponseMessage.getStatus());
+            logConsoleService.writeConsoleLog("response data : "+autoResponseMessage.getData());
             logConsoleService.writeConsoleLog(">>>>>> response to server: " + stringBuffer);
             log.info(">>>>>> response to server: " + stringBuffer);
             websocket.sendText(stringBuffer.toString());
