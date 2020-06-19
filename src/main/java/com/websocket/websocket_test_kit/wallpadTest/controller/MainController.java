@@ -140,12 +140,21 @@ public class MainController {
 
   public void disconnectWebsocket(){
     if (this.webSocket != null && this.webSocket.isOpen()){
-      handleBtnCancelData(null);
+      this.handleBtnCancelData(null);
       logConsoleService.writeConsoleLog("Disconnect Websocket: "+webSocket.getURI());
       log.info("Disconnect Websocket: "+webSocket.getURI());
       this.webSocket.disconnect();
-      btnConnectServer.setDisable(false);
-      btnDisconnect.setDisable(true);
+      this.btnConnectServer.setDisable(false);
+      this.btnDisconnect.setDisable(true);
+      this.btnAcceptData.setDisable(true);
+      this.taConsole.setText("");
+    } else if (this.webSocket != null && !this.webSocket.isOpen()) {
+      this.webSocket = null;
+      this.handleBtnCancelData(null);
+      this.btnConnectServer.setDisable(false);
+      this.btnDisconnect.setDisable(true);
+      this.btnAcceptData.setDisable(true);
+      this.taConsole.setText("");
     }
   }
 }
