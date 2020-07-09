@@ -26,6 +26,11 @@ public class LogConsoleServiceImpl implements LogConsoleService{
     }
   }
 
+  @Override
+  public void printErrorLogToConsoleTextArea(final TextArea taConsole, final Exception e) {
+
+  }
+
   public void setTextArea(final TextArea textArea) {
     this.textArea = textArea;
   }

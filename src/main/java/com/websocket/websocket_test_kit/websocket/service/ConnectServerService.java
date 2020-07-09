@@ -7,8 +7,10 @@
 package com.websocket.websocket_test_kit.websocket.service;
 
 import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketException;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
+import java.io.IOException;
 
 public interface ConnectServerService {
-  WebSocket connectWebsocketToServer(final ConnectInfo connectInfo);
+  WebSocket connectWebsocketToServer(final ConnectInfo connectInfo) throws IOException, WebSocketException;
 }

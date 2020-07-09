@@ -7,6 +7,7 @@
 package com.websocket.websocket_test_kit.websocket.service;
 
 import com.google.gson.Gson;
+import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -40,20 +41,25 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   private LogConsoleService logConsoleService;
   
   @Override
-  public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo) {
+  public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo)
+      throws IOException, WebSocketException, OpeningHandshakeException {
     SSLContext sslContext = this.createSSLContext();
     WebSocket webSocket = null;
 
-    try {
+//    try {
       // Create socket factory
       SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
       webSocket = connect(sslSocketFactory, connectInfo);
       log.info("Connect Success!!");
       logConsoleService.writeConsoleLog("Connect Success!!");
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
+//    } catch (OpeningHandshakeException oe) {
+//
+//      logConsoleService.writeConsoleLog(oe.getCause().getMessage());
+//    } catch (Exception ex) {
+//      logConsoleService.writeConsoleLog(ex.getCause().getMessage());
+//      ex.printStackTrace();
+//    }
 
     return webSocket;
   }
@@ -88,7 +94,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   }
 
   private WebSocket connect(final SSLSocketFactory socketFactory,
-      final ConnectInfo connectInfo) throws IOException, WebSocketException {
+      final ConnectInfo connectInfo) throws IOException, WebSocketException, OpeningHandshakeException {
     log.info("connect to server: " + connectInfo.getFullInfo());
     logConsoleService.writeConsoleLog("connect to server >> " + connectInfo.getFullInfo());
     return new WebSocketFactory()
@@ -108,22 +114,35 @@ public class ConnectServerServiceImpl implements ConnectServerService {
             logConsoleService.writeConsoleLog("<<<<<< message from server: " + message);
             log.info("============================ message ============================");
             log.info("<<<<<< message from server: " + message);
-            WebsocketResponse websocketResponse = autoResponseMessage.buildResponseMessage(message);
-            websocketResponse.setStatus(autoResponseMessage.getStatus());
-            Gson gson = new Gson();
-            String response = gson.toJson(websocketResponse);
-            StringBuffer stringBuffer = new StringBuffer(response);
-            stringBuffer.insert(response.length()-1, ",\"data\":"+autoResponseMessage.getData());
-            logConsoleService.writeConsoleLog("response status : "+autoResponseMessage.getStatus());
-            logConsoleService.writeConsoleLog("response data : "+autoResponseMessage.getData());
-            logConsoleService.writeConsoleLog(">>>>>> response to server: " + stringBuffer);
-            log.info(">>>>>> response to server: " + stringBuffer);
-            websocket.sendText(stringBuffer.toString());
+            if (isNotify(message)) {
+              logConsoleService.writeConsoleLog("is Notify Message // no response to server");
+              log.info("is Notify Message // no response to server");
+            } else {
+              WebsocketResponse websocketResponse = autoResponseMessage.buildResponseMessage(message);
+              websocketResponse.setStatus(autoResponseMessage.getStatus());
+              Gson gson = new Gson();
+              String response = gson.toJson(websocketResponse);
+              StringBuffer stringBuffer = new StringBuffer(response);
+              stringBuffer.insert(response.length()-1, ",\"data\":"+autoResponseMessage.getData());
+              logConsoleService.writeConsoleLog("response status : "+autoResponseMessage.getStatus());
+              logConsoleService.writeConsoleLog("response data : "+autoResponseMessage.getData());
+              logConsoleService.writeConsoleLog(">>>>>> response to server: " + stringBuffer);
+              log.info(">>>>>> response to server: " + stringBuffer);
+              websocket.sendText(stringBuffer.toString());
+            }
             logConsoleService.writeConsoleLog("============================ message ============================");
             log.info("============================ message ============================");
           }
         })
         .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
         .connect();
+  }
+
+  private boolean isNotify(String message) {
+    String type = message.split("\"type\":\"")[1].split("\"")[0];
+    if (type.equalsIgnoreCase("notify")) {
+      return true;
+    }
+    return false;
   }
 }

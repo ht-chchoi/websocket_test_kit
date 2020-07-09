@@ -7,7 +7,11 @@
 package com.websocket.websocket_test_kit.common;
 
 public class ConstVal {
-  public static final double APP_WINDOW_WIDTH=800;
-  public static final double APP_WINDOW_HEIGHT=600;
+  public static final double APP_WINDOW_WIDTH=1000;
+  public static final double APP_WINDOW_HEIGHT=900;
 
+  public static final String CHOICE_BOX_CONNECTED_BY_WALLPAD = "Wallpad";
+  public static final String CHOICE_BOX_CONNECTED_BY_LOBBY = "Lobby";
+  public static final int CHOICE_BOX_CONNECTED_BY_WALLPAD_INDEX = 0;
+  public static final int CHOICE_BOX_CONNECTED_BY_LOBBY_INDEX = 1;
 }

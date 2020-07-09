@@ -6,19 +6,26 @@
  */
 package com.websocket.websocket_test_kit.wallpadTest.controller;
 
+import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.websocket.websocket_test_kit.common.ConstVal;
 import com.websocket.websocket_test_kit.util.UtilQueryBuilder;
 import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
 import com.websocket.websocket_test_kit.websocket.service.ConnectServerService;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import lombok.Getter;
@@ -39,9 +46,13 @@ public class MainController {
   @FXML
   private TextField tfHo;
   @FXML
-  private TextField tfWpIp;
+  private TextField tfDbIp;
+  @FXML
+  private TextField tfLobbyNum;
   @FXML
   private TextField tfToken;
+  @FXML
+  private ChoiceBox chbConnectBy;
   @FXML
   private Button btnConnectServer;
   @FXML
@@ -80,6 +91,14 @@ public class MainController {
     taDataToResponse.setText("{\"result\" : 200}");
     autoResponseMessage.setData("{\"result\" : 200}");
     btnAcceptData.setDisable(true);
+
+//    콤보박스 아이템 세팅 및 리스너 세팅
+    chbConnectBy.getItems().add(ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD_INDEX,
+        ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD);
+    chbConnectBy.getItems().add(ConstVal.CHOICE_BOX_CONNECTED_BY_LOBBY_INDEX,
+        ConstVal.CHOICE_BOX_CONNECTED_BY_LOBBY);
+    chbConnectBy.setValue(ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD);
+    this.setChbConnectListener();
   }
 
   @FXML
@@ -87,17 +106,21 @@ public class MainController {
     logConsoleService.writeConsoleLog("=================== Start Server Connection ===================");
     log.info("=================== Start Server Connection ===================");
     this.disconnectWebsocket();
-    webSocket = connectServerService.connectWebsocketToServer(ConnectInfo.builder()
-        .schema("wss")
-        .ip(tfIp.getText())
-        .port(tfPort.getText())
-        .requestUrl(UtilQueryBuilder.buildConnectServerRequestUri(tfDong.getText(), tfHo.getText()))
-        .query(UtilQueryBuilder.buildConnectServerQuery(tfSite.getText(), tfWpIp.getText(), tfToken.getText()))
-        .build());
+    try {
+      this.connectWebsocket(chbConnectBy.getValue().toString());
+    } catch (OpeningHandshakeException e) {
+      logConsoleService.writeConsoleLog(e.getMessage());
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (WebSocketException e) {
+      e.printStackTrace();
+    }
     if (webSocket != null && webSocket.isOpen()){
       btnConnectServer.setDisable(true);
       btnDisconnect.setDisable(false);
       btnAcceptData.setDisable(false);
+      chbConnectBy.setDisable(true);
     }
     logConsoleService.writeConsoleLog("=================== End Server Connection ====================");
     log.info("=================== End Server Connection ===================");
@@ -131,11 +154,52 @@ public class MainController {
   }
 
   @FXML
-  private void handleBtnCancelData(ActionEvent event){
+  private void handleBtnCancelData(ActionEvent event) {
     autoResponseMessage.setData("");
     btnAcceptData.setDisable(false);
     taDataToResponse.setDisable(false);
     btnCancelData.setDisable(true);
+  }
+
+  @FXML
+  private void handleBtnClearConsole(ActionEvent event) {
+    taConsole.setText("");
+  }
+
+  public void setChbConnectListener() {
+    this.chbConnectBy.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) ->
+    {
+      if (newValue.intValue() == ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD_INDEX) {
+        tfDong.setText("701");
+        tfHo.setText("904");
+        tfDbIp.setText("127.0.0.1");
+      } else if (newValue.intValue() == ConstVal.CHOICE_BOX_CONNECTED_BY_LOBBY_INDEX) {
+        tfLobbyNum.setText("1");
+        tfDbIp.setText("172.20.202.1");
+      }
+    });
+  }
+
+  public void connectWebsocket(String connectBy)
+      throws IOException, WebSocketException, OpeningHandshakeException {
+    if (connectBy.equals(ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD)) {
+      webSocket = connectServerService.connectWebsocketToServer(ConnectInfo.builder()
+          .schema("wss")
+          .ip(tfIp.getText())
+          .port(tfPort.getText())
+          .requestUrl(UtilQueryBuilder.buildConnectServerWallpadRequestUri(tfDong.getText(), tfHo.getText()))
+          .query(UtilQueryBuilder.buildConnectServerWallpadQuery(tfSite.getText(), tfDbIp.getText(), tfToken.getText()))
+          .build());
+    } else if (connectBy.equals(ConstVal.CHOICE_BOX_CONNECTED_BY_LOBBY)) {
+      webSocket = connectServerService.connectWebsocketToServer(ConnectInfo.builder()
+          .schema("wss")
+          .ip(tfIp.getText())
+          .port(tfPort.getText())
+          .requestUrl(UtilQueryBuilder.buildConnectServerLobbyRequestUri(tfLobbyNum.getText()))
+          .query(UtilQueryBuilder.buildConnectServerLobbyQuery(tfSite.getText(), tfDbIp.getText(), tfToken.getText()))
+          .build());
+    }
+
   }
 
   public void disconnectWebsocket(){
@@ -148,6 +212,7 @@ public class MainController {
       this.btnDisconnect.setDisable(true);
       this.btnAcceptData.setDisable(true);
       this.taConsole.setText("");
+      this.chbConnectBy.setDisable(false);
     } else if (this.webSocket != null && !this.webSocket.isOpen()) {
       this.webSocket = null;
       this.handleBtnCancelData(null);
@@ -155,6 +220,7 @@ public class MainController {
       this.btnDisconnect.setDisable(true);
       this.btnAcceptData.setDisable(true);
       this.taConsole.setText("");
+      this.chbConnectBy.setDisable(false);
     }
   }
 }
