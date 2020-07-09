@@ -17,8 +17,6 @@ import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import com.websocket.websocket_test_kit.wallpadTest.data.WebsocketResponse;
 import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
 import javax.net.ssl.SSLContext;
@@ -28,7 +26,6 @@ import javax.net.ssl.TrustManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.stereotype.Service;
 
 @Service("ConnectServerService")
@@ -42,24 +39,15 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   
   @Override
   public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo)
-      throws IOException, WebSocketException, OpeningHandshakeException {
+      throws IOException, WebSocketException {
     SSLContext sslContext = this.createSSLContext();
     WebSocket webSocket = null;
 
-//    try {
-      // Create socket factory
-      SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+    SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-      webSocket = connect(sslSocketFactory, connectInfo);
-      log.info("Connect Success!!");
-      logConsoleService.writeConsoleLog("Connect Success!!");
-//    } catch (OpeningHandshakeException oe) {
-//
-//      logConsoleService.writeConsoleLog(oe.getCause().getMessage());
-//    } catch (Exception ex) {
-//      logConsoleService.writeConsoleLog(ex.getCause().getMessage());
-//      ex.printStackTrace();
-//    }
+    webSocket = connect(sslSocketFactory, connectInfo);
+    log.info("Connect Success!!");
+    logConsoleService.writeConsoleLog("Connect Success!!");
 
     return webSocket;
   }
@@ -94,7 +82,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   }
 
   private WebSocket connect(final SSLSocketFactory socketFactory,
-      final ConnectInfo connectInfo) throws IOException, WebSocketException, OpeningHandshakeException {
+      final ConnectInfo connectInfo) throws IOException, WebSocketException {
     log.info("connect to server: " + connectInfo.getFullInfo());
     logConsoleService.writeConsoleLog("connect to server >> " + connectInfo.getFullInfo());
     return new WebSocketFactory()

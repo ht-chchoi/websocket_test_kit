@@ -6,7 +6,6 @@
  */
 package com.websocket.websocket_test_kit.wallpadTest.controller;
 
-import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.websocket.websocket_test_kit.common.ConstVal;
@@ -20,8 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -108,13 +105,9 @@ public class MainController {
     this.disconnectWebsocket();
     try {
       this.connectWebsocket(chbConnectBy.getValue().toString());
-    } catch (OpeningHandshakeException e) {
-      logConsoleService.writeConsoleLog(e.getMessage());
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (WebSocketException e) {
-      e.printStackTrace();
+    }  catch (IOException | WebSocketException e) {
+      logConsoleService.printErrorLogToConsoleTextArea(taConsole, e);
+      this.disconnectWebsocket();
     }
     if (webSocket != null && webSocket.isOpen()){
       btnConnectServer.setDisable(true);
@@ -181,7 +174,7 @@ public class MainController {
   }
 
   public void connectWebsocket(String connectBy)
-      throws IOException, WebSocketException, OpeningHandshakeException {
+      throws IOException, WebSocketException {
     if (connectBy.equals(ConstVal.CHOICE_BOX_CONNECTED_BY_WALLPAD)) {
       webSocket = connectServerService.connectWebsocketToServer(ConnectInfo.builder()
           .schema("wss")

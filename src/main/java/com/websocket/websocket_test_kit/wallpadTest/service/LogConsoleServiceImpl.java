@@ -6,10 +6,14 @@
  */
 package com.websocket.websocket_test_kit.wallpadTest.service;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Background;
 
 @Service("LogConsoleService")
 public class LogConsoleServiceImpl implements LogConsoleService{
@@ -28,7 +32,9 @@ public class LogConsoleServiceImpl implements LogConsoleService{
 
   @Override
   public void printErrorLogToConsoleTextArea(final TextArea taConsole, final Exception e) {
-
+    StringWriter stringWriter = new StringWriter();
+    e.printStackTrace(new PrintWriter(stringWriter));
+    taConsole.setText(e.toString() + "\n" + stringWriter.toString());
   }
 
   public void setTextArea(final TextArea textArea) {
