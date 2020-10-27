@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.websocket</groupId>
     <artifactId>websocket_test_kit</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
     <name>websocket_test_kit</name>
     <description>websocket test app</description>
 
@@ -62,6 +62,22 @@
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>15.0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>15.0.1</version>
+        </dependency>
+
+
 
 
     </dependencies>
