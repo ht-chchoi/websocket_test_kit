@@ -7,18 +7,21 @@
 package com.websocket.websocket_test_kit.websocket.service;
 
 import com.google.gson.Gson;
-import com.neovisionaries.ws.client.OpeningHandshakeException;
+import com.google.gson.JsonSyntaxException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import com.websocket.websocket_test_kit.wallpadTest.controller.MainController;
 import com.websocket.websocket_test_kit.wallpadTest.data.AutoResponseMessage;
 import com.websocket.websocket_test_kit.wallpadTest.data.ConnectInfo;
 import com.websocket.websocket_test_kit.wallpadTest.data.WebsocketResponse;
 import com.websocket.websocket_test_kit.wallpadTest.service.LogConsoleService;
 import java.io.IOException;
 import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -26,7 +29,14 @@ import javax.net.ssl.TrustManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service("ConnectServerService")
 public class ConnectServerServiceImpl implements ConnectServerService {
@@ -36,6 +46,12 @@ public class ConnectServerServiceImpl implements ConnectServerService {
   private AutoResponseMessage autoResponseMessage;
   @Autowired
   private LogConsoleService logConsoleService;
+  @Autowired
+  private MainController mainController;
+  @Autowired
+  private RestTemplate restTemplate;
+
+  private final Gson gson = new Gson();
   
   @Override
   public WebSocket connectWebsocketToServer(final ConnectInfo connectInfo)
@@ -118,6 +134,49 @@ public class ConnectServerServiceImpl implements ConnectServerService {
               log.info(">>>>>> response to server: " + stringBuffer);
               websocket.sendText(stringBuffer.toString());
             }
+
+            // deviceEvent 체크되있을 시
+            if (mainController.isDeviceEvent()) {
+              UriComponents uriComponents = UriComponentsBuilder
+                  .fromHttpUrl("https://"+mainController.getIp()+":30001/device")
+                  .queryParam("access_token", mainController.getAccessToken())
+                  .build();
+
+              Map<String, Object> reqBody = null;
+              try {
+                Map<String, Object> responseData = gson.fromJson(mainController.getResponseData(), Map.class);
+                reqBody = new HashMap<>();
+                reqBody.put("siteId", mainController.getSiteId());
+                reqBody.put("dong", mainController.getDong());
+                reqBody.put("ho", mainController.getHo());
+                reqBody.put("deviceId", mainController.getDeviceId());
+                reqBody.put("state", "NORMAL");
+                reqBody.put("devicePropertyList", responseData.get("properties"));
+              } catch (JsonSyntaxException e) {
+                log.error("error >> ", e);
+                logConsoleService.printErrorLogToConsoleTextArea(mainController.getTaConsole(), e);
+              }
+
+              log.info("device event send >> reqBody: {}", gson.toJson(reqBody));
+              logConsoleService.writeConsoleLog("device event send >> reqBody: "+gson.toJson(reqBody));
+              ResponseEntity<Object> deviceEventResponse = null;
+              try {
+                deviceEventResponse = restTemplate.exchange(
+                    uriComponents.toString(),
+                    HttpMethod.POST,
+                    new HttpEntity<>(reqBody, null),
+                    Object.class);
+              } catch (RestClientException e) {
+                log.error("fail to event req >> ", e);
+                logConsoleService.printErrorLogToConsoleTextArea(mainController.getTaConsole(), e);
+              }
+
+              if (deviceEventResponse != null) {
+                log.info("event response << statusCode: {}", deviceEventResponse.getStatusCode());
+                logConsoleService.writeConsoleLog("event response << statusCode: "+deviceEventResponse.getStatusCode());
+              }
+            }
+
             logConsoleService.writeConsoleLog("============================ message ============================");
             log.info("============================ message ============================");
           }

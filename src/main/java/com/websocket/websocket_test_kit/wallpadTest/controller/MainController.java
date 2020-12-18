@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -46,6 +47,10 @@ public class MainController {
   private TextField tfDbIp;
   @FXML
   private TextField tfLobbyNum;
+  @FXML
+  private CheckBox cbDeviceEvent;
+  @FXML
+  private TextField tfDeviceId;
   @FXML
   private TextField tfToken;
   @FXML
@@ -81,7 +86,7 @@ public class MainController {
   public void initialize() {
     logConsoleService.setTextArea(taConsole);
 //    토큰 초기설정
-//    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNTkxNjE1NjAxLCJqdGkiOiI2ODVjMWQ2NS1lNTdmLTQxM2MtOTJjMi03YTdkYjAyOGE3MDEiLCJjbGllbnRfaWQiOiJ0ZXN0In0.St6IvAjM6zISG9PoNMMz4TxjyVAPuN4yKusZU58wLpM");
+    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNjA4MzIwNTM4LCJqdGkiOiJmZmI5MDE4Ni1hYzU1LTQ5OWUtOTNmMy1jZjJjZjcxNzk3N2UiLCJjbGllbnRfaWQiOiJ0ZXN0In0.N2lQCay7iW_RzqHGuWXx_f3NRhKEA_MxnFM2fsqOZak");
     logConsoleService.writeConsoleLog("initial response status : 200");
     autoResponseMessage.setStatus(200);
     logConsoleService.writeConsoleLog("initial response data : {\"result\" : 200}");
@@ -215,5 +220,37 @@ public class MainController {
       this.taConsole.setText("");
       this.chbConnectBy.setDisable(false);
     }
+  }
+
+  public boolean isDeviceEvent() {
+    return this.cbDeviceEvent.isSelected();
+  }
+
+  public String getIp() {
+    return this.tfIp.getText();
+  }
+
+  public String getResponseData() {
+    return this.taDataToResponse.getText();
+  }
+
+  public String getSiteId() {
+    return this.tfSite.getText();
+  }
+
+  public String getDong() {
+    return this.tfDong.getText();
+  }
+
+  public String getHo() {
+    return this.tfHo.getText();
+  }
+
+  public String getAccessToken() {
+    return this.tfToken.getText();
+  }
+
+  public String getDeviceId() {
+    return this.tfDeviceId.getText();
   }
 }

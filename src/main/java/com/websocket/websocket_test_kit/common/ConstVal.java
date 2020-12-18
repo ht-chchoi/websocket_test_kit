@@ -7,7 +7,7 @@
 package com.websocket.websocket_test_kit.common;
 
 public class ConstVal {
-  public static final double APP_WINDOW_WIDTH=1000;
+  public static final double APP_WINDOW_WIDTH=1400;
   public static final double APP_WINDOW_HEIGHT=900;
 
   public static final String CHOICE_BOX_CONNECTED_BY_WALLPAD = "Wallpad";
