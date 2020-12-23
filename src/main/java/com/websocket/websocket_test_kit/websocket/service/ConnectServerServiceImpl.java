@@ -122,8 +122,9 @@ public class ConnectServerServiceImpl implements ConnectServerService {
               logConsoleService.writeConsoleLog("is Notify Message // no response to server");
               log.info("is Notify Message // no response to server");
             } else {
-              WebsocketResponse websocketResponse = autoResponseMessage.buildResponseMessage(message);
-              websocketResponse.setStatus(autoResponseMessage.getStatus());
+              WebsocketResponse websocketResponse =
+                  autoResponseMessage.buildResponseMessage(Integer.parseInt(mainController.getTfStatus().getText()), message);
+              websocketResponse.setStatus(Integer.parseInt(mainController.getTfStatus().getText()));
               Gson gson = new Gson();
               String response = gson.toJson(websocketResponse);
               StringBuffer stringBuffer = new StringBuffer(response);
@@ -154,7 +155,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
                 reqBody.put("devicePropertyList", responseData.get("properties"));
               } catch (JsonSyntaxException e) {
                 log.error("error >> ", e);
-                logConsoleService.printErrorLogToConsoleTextArea(mainController.getTaConsole(), e);
+                logConsoleService.printErrorLogToConsoleTextArea(e);
               }
 
               log.info("device event send >> reqBody: {}", gson.toJson(reqBody));
@@ -168,7 +169,7 @@ public class ConnectServerServiceImpl implements ConnectServerService {
                     Object.class);
               } catch (RestClientException e) {
                 log.error("fail to event req >> ", e);
-                logConsoleService.printErrorLogToConsoleTextArea(mainController.getTaConsole(), e);
+                logConsoleService.printErrorLogToConsoleTextArea(e);
               }
 
               if (deviceEventResponse != null) {

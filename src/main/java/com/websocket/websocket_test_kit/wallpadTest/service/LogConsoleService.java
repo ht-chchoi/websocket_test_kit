@@ -6,10 +6,7 @@
  */
 package com.websocket.websocket_test_kit.wallpadTest.service;
 
-import javafx.scene.control.TextArea;
-
 public interface LogConsoleService {
-  void setTextArea(TextArea textArea);
   void writeConsoleLog(String text);
-  void printErrorLogToConsoleTextArea(TextArea taConsole, Exception e);
+  void printErrorLogToConsoleTextArea(Exception e);
 }

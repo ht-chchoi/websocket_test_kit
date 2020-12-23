@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.websocket</groupId>
     <artifactId>websocket_test_kit</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <name>websocket_test_kit</name>
     <description>websocket test app</description>
 

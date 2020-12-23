@@ -84,9 +84,8 @@ public class MainController {
 
   @FXML
   public void initialize() {
-    logConsoleService.setTextArea(taConsole);
 //    토큰 초기설정
-    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNjA4MzIwNTM4LCJqdGkiOiJmZmI5MDE4Ni1hYzU1LTQ5OWUtOTNmMy1jZjJjZjcxNzk3N2UiLCJjbGllbnRfaWQiOiJ0ZXN0In0.N2lQCay7iW_RzqHGuWXx_f3NRhKEA_MxnFM2fsqOZak");
+    tfToken.setText("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJsYWJzX3RlYW0iLCJ1c2VyX2RldGFpbCI6eyJvYXV0aF91c2VyX2luZm8iOnsibWVtYmVySWQiOiJsYWJzX3RlYW0iLCJuYW1lIjoi7Jew6rWs7IaMIiwiYmlydGhkYXkiOm51bGwsImhvbWVQaG9uZU51bWJlciI6IiIsImNlbGxQaG9uZU51bWJlciI6IjAxMC00OTA0LTg2NjkiLCJlbWFpbCI6IiIsImdlbmRlciI6bnVsbCwiYXV0aG9yaXplZERhdGUiOm51bGx9fSwic2NvcGUiOlsidHJ1c3QiLCJyZWFkIiwid3JpdGUiXSwiZXhwIjoxNjA4NzI3NTQwLCJqdGkiOiIxZTUxZTUwMS0zZmI4LTRmNjQtYWM0YS01YmE4ZmJjNzcxODQiLCJjbGllbnRfaWQiOiJ0ZXN0In0.0Exlc6DbxMQjhdbBpqE9HA43PZENnKi0GKOwX0shfpI");
     logConsoleService.writeConsoleLog("initial response status : 200");
     autoResponseMessage.setStatus(200);
     logConsoleService.writeConsoleLog("initial response data : {\"result\" : 200}");
@@ -111,7 +110,7 @@ public class MainController {
     try {
       this.connectWebsocket(chbConnectBy.getValue().toString());
     }  catch (IOException | WebSocketException e) {
-      logConsoleService.printErrorLogToConsoleTextArea(taConsole, e);
+      logConsoleService.printErrorLogToConsoleTextArea(e);
       this.disconnectWebsocket();
     }
     if (webSocket != null && webSocket.isOpen()){
